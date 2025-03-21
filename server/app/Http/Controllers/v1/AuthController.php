@@ -21,18 +21,28 @@ class AuthController extends Controller
         ]);
     }
 
-    // function login(Request $request)
-    // {
-    //     $credentials = [
-    //         "email" => $request['email'],
-    //         'password' => $request['password']
-    //     ];
+    function login(Request $request)
+    {
+        $credentials = [
+            "email" => $request['email'],
+            'password' => $request['password']
+        ];
 
-    //     $user = Auth::user();
+        $token = Auth::attempt($credentials);
 
-    //     return response()->json([
-    //         'success' => true,
-    //         'user' => $user
-    //     ]);
-    // }
+        if (!$token = Auth::attempt($credentials)) {
+            return response()->json([
+                "success" => false,
+                "error" => "Unauthorized"
+            ], 401);
+        }
+
+        $user = Auth::user();
+        $user->token = $token;
+
+        return response()->json([
+            "success" => true,
+            "user" => $user
+        ]);
+    }
 }
