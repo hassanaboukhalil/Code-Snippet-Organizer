@@ -60,6 +60,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function snippets()
+    {
+        return $this->hasMany(Snippet::class);
+    }
+
     // public function scopeCreatedToday($query)
     // {
     //     return $query->whereDate('created_at', Carbon::today());
