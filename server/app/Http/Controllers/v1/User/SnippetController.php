@@ -48,7 +48,7 @@ class SnippetController extends Controller
             $snippet->is_public = $request["is_public"];
             $snippet->save();
 
-            foreach ($request->keywords as $keyword) {
+            foreach ($request['keywords'] as $keyword) {
                 $snippet->keywords()->create(['name' => $keyword]);
             }
 
@@ -69,7 +69,7 @@ class SnippetController extends Controller
 
     function updateSnippet(Request $request)
     {
-        $snippet = Snippet::find($request['id']);
+        $snippet = Snippet::find($request["id"]);
         if (!$snippet) {
             return response()->json([
                 'success' => false,
@@ -78,12 +78,23 @@ class SnippetController extends Controller
         }
 
         try {
-            $snippet->title = $request["title"];
-            $snippet->code = $request["code"];
-            $snippet->language = $request["language"];
-            $snippet->tag = $request["tag"];
-            $snippet->is_favorite = $request["is_favorite"];
+            // $snippet->user_id = Auth::id();
+            $request["title"] ? $snippet->title = $request["title"] : '';
+            $request["code"] ? $snippet->code = $request["code"] : '';
+            $request["language"] ? $snippet->language = $request["language"] : '';
+            $request["is_favorite"] ? $snippet->is_favorite = $request["is_favorite"] : '';
+            $request["is_public"] ? $snippet->is_public = $request["is_public"] : '';
             $snippet->save();
+
+            if ($request['keywords']) {
+                foreach ($request['keywords'] as $keyword) {
+                    $snippet->keywords()->create(['name' => $keyword]);
+                }
+            }
+
+            if ($request["tags"]) {
+                $snippet->tags()->sync($request["tags"]);
+            }
 
             return response()->json([
                 "success" => "true",
@@ -96,7 +107,6 @@ class SnippetController extends Controller
             ], 500);
         }
     }
-
 
 
     function deleteSnippet(Request $request)
