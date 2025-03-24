@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('snippets_keywords', function (Blueprint $table) {
+        Schema::create('snippet_tag', function (Blueprint $table) {
             $table->id();
-            $table->integer('snippet_id');
-            $table->integer('keyword_id');
+            $table->foreignId('snippet_id')->constrained()->onDelete('cascade');
+            $table->foreignId('tag_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('snippets_keywords');
+        Schema::dropIfExists('snippet_tag');
     }
 };

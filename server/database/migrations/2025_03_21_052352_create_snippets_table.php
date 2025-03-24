@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('snippets', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('code');
             $table->string('language');

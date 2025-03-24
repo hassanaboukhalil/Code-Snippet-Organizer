@@ -13,13 +13,13 @@ class Snippet extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function tags()
-    {
-        return $this->hasMany(Tag::class);
-    }
-
     public function keywords()
     {
         return $this->hasMany(Keyword::class);
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'snippet_tag');
     }
 }

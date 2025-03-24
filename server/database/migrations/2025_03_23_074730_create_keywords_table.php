@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('keywords', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('snippet_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
         });
