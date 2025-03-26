@@ -34,7 +34,21 @@ class SnippetController extends Controller
         ]);
     }
 
-    function getPublicSnippets() {}
+    function getPublicSnippets()
+    {
+        $snippets = Snippet::where('is_public', true)->get();
+        if ($snippets) {
+            return response()->json([
+                'success' => true,
+                "snippets" => $snippets
+            ]);
+        };
+
+        return response()->json([
+            "success" => false,
+            "snippets" => null
+        ]);
+    }
 
     function addSnippet(Request $request)
     {
@@ -133,5 +147,48 @@ class SnippetController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    function makePublic(Request $request)
+    {
+
+        $snippet = Snippet::find($request["id"]);
+
+        if (!$snippet) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Snippet not found'
+            ], 404);
+        }
+
+        $snippet->is_public = true;
+        $snippet->save();
+
+        return response()->json([
+            'success' => true,
+            'snippet' => $snippet
+        ]);
+    }
+
+    function makePrivate(Request $request)
+    {
+
+        $snippet = Snippet::find($request["id"]);
+
+        if (!$snippet) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Snippet not found'
+            ], 404);
+        }
+
+        $snippet->is_public = false;
+
+        $snippet->save();
+
+        return response()->json([
+            'success' => true,
+            'snippet' => $snippet
+        ]);
     }
 }

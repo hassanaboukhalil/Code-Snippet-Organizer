@@ -17,6 +17,8 @@ Route::group(['prefix' => 'v1'], function () {
             Route::post('/addSnippet', [SnippetController::class, 'addSnippet']);
             Route::post('/updateSnippet', [SnippetController::class, 'updateSnippet']);
             Route::post('/deleteSnippet', [SnippetController::class, 'deleteSnippet']);
+            Route::post('/makePublic', [SnippetController::class, 'makePublic']);
+            Route::post('/makePrivate', [SnippetController::class, 'makePrivate']);
         });
     });
 
@@ -25,5 +27,6 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'guest'], function () {
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/signup', [AuthController::class, 'signup']);
+        Route::get('/getPublicSnippets', [SnippetController::class, 'getPublicSnippets']);
     });
 });
